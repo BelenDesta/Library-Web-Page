@@ -13,12 +13,17 @@
     <%- booksAvailable %>
     
 
-    
-        <form action="http://localhost:<%- portNumber %>/selectProfile" method="post">
-            <input type="text" name="username">
+
+        <form action="http://localhost:<%- portNumber %>/checkOutConfirmation" method="post">
+           
+            <select name="itemsSelected" multiple>
+				<%- items %>
+			</select>
 
             <input type="submit"> 
         </form>
+
+    
    
 </body>
 </html>

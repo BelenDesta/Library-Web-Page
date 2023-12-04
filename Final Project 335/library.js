@@ -47,6 +47,72 @@ console.log(`Web server started and running at http://localhost:${portNumber}`);
 let catalogTableString =  "<table border='1'>";
 catalogTableString += "<tr><th>Book Title</th><th>Book Author</th><th>Quantity</th></tr>";
 
+let booksCheckedOut = "Not yet."; 
+
+
+app.get("/checkOut", (request, response) => {
+
+  response.render("checkOut", {booksAvailable: "No books", items: "Not yet", portNumber: portNumber, checkedOut: "Books checked out will display here."});
+
+
+});
+
+app.post("/checkoutConfirmation", (request, response ) => {
+  let { itemsSelected} = request.body; 
+
+  console.log(itemsSelected);
+
+
+
+    /* if itemsSelected is not an array, that is there is nothing selected or only one */ 
+    if(Array.isArray(itemsSelected) === false){
+    
+
+      /* if nothing is selected by user, create empty array */ 
+      if(itemsSelected == undefined){
+
+   
+
+        itemsSelected = []; 
+      }
+      /* if one thing selected by user, create array with one element */ 
+      else if(typeof itemsSelected == "string"){
+     
+
+        itemsSelected = [itemsSelected];
+      }
+    }
+    
+    console.log("Two: " + itemsSelected);
+
+
+    /* create catalog table */ 
+    let str = "";
+
+    str += "<table border='1'>";
+    str += "<tr><th>Item</th></tr>";
+
+     if(itemsSelected.length >= 1){
+     // inventory.itemsPurchased(itemsSelected);
+
+      
+     
+   //   itemsSelected.forEach(item => str += `<tr><td>${item}</td><td>${inventory.getItemCost(item).toFixed(2)}</td></tr>`);
+     
+          itemsSelected.forEach(item => str += `<tr><td>${item}</td></tr>` );
+
+
+     //  str += `<tr><td>Cost: </td><td>${inventory.gettotalCost().toFixed(2)}</td></tr>`;
+   }
+
+    str += "</table>";
+
+    console.log(`str after selection is: ${str}`);
+
+  response.render("checkedOutConfirmation", {portNumber: portNumber, checkedOut: str});
+
+
+});
 
 app.get("/", (request, response) =>{ 
     response.render("index", {portNumber: portNumber});
@@ -145,7 +211,13 @@ async function findAllAvailable(){
 
     console.log(`Result strig is: ${resultString}`);
 
-    response.render("checkOut", {booksAvailable: resultString, portNumber: portNumber});
+    let itemString; 
+
+    result.forEach(item => itemString += `<option value='${item.bookTitle}'>${item.bookTitle}</option>`);
+
+    booksCheckedOut = "2439u3";
+
+    response.render("checkOut", {booksAvailable: resultString, items: itemString, portNumber: portNumber, checkedOut: "Books checked out will display here."});
 
 } catch (e) {
     console.error(e);
@@ -360,6 +432,8 @@ app.post("/searchBook", (request, response) => {
 }
 
 }); 
+
+
 
 
 

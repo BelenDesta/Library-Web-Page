@@ -101,7 +101,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
      
           itemsSelected.forEach(item => str += `<tr><td>${item}</td></tr>` );
 
-
+          itemsSelected.forEach(item => deleteBook({bookTitle:item})); 
      //  str += `<tr><td>Cost: </td><td>${inventory.gettotalCost().toFixed(2)}</td></tr>`;
    }
 
@@ -110,6 +110,51 @@ app.post("/checkoutConfirmation", (request, response ) => {
     console.log(`str after selection is: ${str}`);
 
   response.render("checkedOutConfirmation", {portNumber: portNumber, checkedOut: str});
+
+
+
+
+  deleteBook(variables);
+
+  async function deleteBook(filters){
+
+    let result; 
+  
+    try {
+      await client.connect();
+      console.log("***** Deleting one movie *****");
+     
+      result = await deleteOne(client, databaseAndCollection, filters);
+  
+      return result; 
+  
+  
+  } catch (e) {
+      console.error(e);
+  } finally {
+      await client.close();
+  
+      return result;
+  }
+  }
+  
+  async function deleteOne(client, databaseAndCollection, filters) {
+   
+    const result = await client.db(databaseAndCollection.db)
+                   .collection(databaseAndCollection.collection)
+                   .deleteOne(filters);
+    
+     console.log(`Documents deleted ${result.deletedCount}`);
+  
+     if(result.deletedCount > 0){
+      response.render("removeBook", {status: "Deleted", portNumber: portNumber});
+
+     }else{
+      response.render("removeBook", {status: "Unsucessful Deletion", portNumber: portNumber});
+
+     }
+  }
+
 
 
 });

@@ -121,7 +121,7 @@ app.post("/userActions", (request, response) => {
         response.render("viewCatalog" , {catalogTable: catalogTableString, portNumber: portNumber});
   }else if(userSelection == "editReadingList"){
 
-        response.render("selectProfile", {portNumber: portNumber});
+        response.render("checkOut", {portNumber: portNumber});
   }else if(userSelection == "searchBook"){
 
     response.render("searchBook", {result: "", portNumber: portNumber});
@@ -275,7 +275,7 @@ async function viewCatalog(){
 
 }
 
-app.post("/selectProfile", (request, response) => {
+app.post("/checkOut", (request, response) => {
     
   let {username} = request.body;
 

@@ -45,7 +45,7 @@ app.listen(portNumber);
 console.log(`Web server started and running at http://localhost:${portNumber}`);
 
 let catalogTableString =  "<table border='1'>";
-catalogTableString += "<tr><th>Book Title</th><th>Book Author</th><th>Quantity</th></tr>";
+catalogTableString += "<tr><th>Book Title</th><th>Book Author</th></tr>";
 
 let booksCheckedOut = "Not yet."; 
 
@@ -194,7 +194,7 @@ async function findAllAvailable(){
   try {
 
     await client.connect();
-    let filter = {quantity: {$gte:0}};
+    let filter = {};
     const cursor = client.db(databaseAndCollection.db)
     .collection(databaseAndCollection.collection)
     .find(filter);
@@ -203,9 +203,9 @@ async function findAllAvailable(){
     console.log(`Found: ${result.length} movies`);
     console.log(result);
 
-    let resultString = "<table border='1'><tr><th>Title</th><th>Author</th><th>Quantity</th></tr>";
+    let resultString = "<table border='1'><tr><th>Title</th><th>Author</th></tr>";
 
-    result.forEach(item => resultString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td><td>${item.quantity}</td></tr>`);
+    result.forEach(item => resultString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td></tr>`);
 
     resultString += "</table>";
 
@@ -296,25 +296,24 @@ app.get("/addBook", (request, response) => {
 });
 
 app.post("/addBook", (request, response) => {
-  let {bookTitle, bookAuthor, quantity} = request.body; 
+  let {bookTitle, bookAuthor } = request.body; 
 
   console.log(`Book title is: ${bookTitle}`);
   console.log(`Book author is: ${bookAuthor}`);
-  console.log(`Book quantity is: ${quantity}`);
 
 
 
   const variables = {
     bookTitle: bookTitle,
     bookAuthor: bookAuthor,
-    quantity: Number(quantity),
+    // quantity: Number(quantity),
   }
 
   insertNewBook(variables);
 
-  catalogTableString += `<tr><td>${bookTitle}</td><td>${bookAuthor}</td><td>${quantity}</td></tr>`;
+  catalogTableString += `<tr><td>${bookTitle}</td><td>${bookAuthor}</td></tr>`;
 
-  response.render("bookAdded", {title: bookTitle, author: bookAuthor, quantity: quantity, portNumber: portNumber});
+  response.render("bookAdded", {title: bookTitle, author: bookAuthor, portNumber: portNumber});
 
 });
 
@@ -358,8 +357,8 @@ async function viewCatalog(){
     const result = await cursor.toArray();
     console.log(`Found: ${result.length} movies`);
     console.log(result);
-    let catalogString = "<table border ='1'><tr><th>Title</th><th>Author</th><th>Quantity</th></tr>";
-    result.forEach(item => catalogString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td><td>${item.quantity}</td></tr>`);
+    let catalogString = "<table border ='1'><tr><th>Title</th><th>Author</th></tr>";
+    result.forEach(item => catalogString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td></tr>`);
 
     console.log("Catalog string is: " + catalogString);
 

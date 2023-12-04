@@ -121,7 +121,39 @@ app.post("/userActions", (request, response) => {
         response.render("viewCatalog" , {catalogTable: catalogTableString, portNumber: portNumber});
   }else if(userSelection == "editReadingList"){
 
-        response.render("checkOut", {portNumber: portNumber});
+   
+    findAllAvailable();
+
+async function findAllAvailable(){
+  try {
+
+    await client.connect();
+    let filter = {quantity: {$gte:0}};
+    const cursor = client.db(databaseAndCollection.db)
+    .collection(databaseAndCollection.collection)
+    .find(filter);
+    
+    const result = await cursor.toArray();
+    console.log(`Found: ${result.length} movies`);
+    console.log(result);
+
+    let resultString = "<table border='1'><tr><th>Title</th><th>Author</th><th>Quantity</th></tr>";
+
+    result.forEach(item => resultString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td><td>${item.quantity}</td></tr>`);
+
+    resultString += "</table>";
+
+    console.log(`Result strig is: ${resultString}`);
+
+    response.render("checkOut", {booksAvailable: resultString, portNumber: portNumber});
+
+} catch (e) {
+    console.error(e);
+} finally {
+    await client.close();
+}
+}
+
   }else if(userSelection == "searchBook"){
 
     response.render("searchBook", {result: "", portNumber: portNumber});
@@ -203,7 +235,7 @@ app.post("/addBook", (request, response) => {
   const variables = {
     bookTitle: bookTitle,
     bookAuthor: bookAuthor,
-    quantity: quantity,
+    quantity: Number(quantity),
   }
 
   insertNewBook(variables);
@@ -275,19 +307,7 @@ async function viewCatalog(){
 
 }
 
-app.post("/checkOut", (request, response) => {
-    
-  let {username} = request.body;
 
-  console.log(`Username is ${username}`);
-
-  insertNewUser(username);
-
-  async function insertNewUser(username){
-    
-  }
-
-});
 
 
 

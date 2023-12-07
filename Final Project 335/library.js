@@ -28,9 +28,9 @@ const path2 = require("path");
 const express = require("express"); /* Accessing express module */
 const app = express(); /* app is a request handler function */
 const bodyParser = require("body-parser"); /* To handle post parameters */
+const { error } = require("console");
 
 const portNumber = portEntered;
-
 
 /* Initializes request.body with post information */ 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -41,8 +41,23 @@ app.set("views", path2.resolve(__dirname, "templates"));
 /* view/templating engine */
 app.set("view engine", "ejs");
 
-app.listen(portNumber);
-console.log(`Web server started and running at http://localhost:${portNumber}`);
+
+const server = app.listen(portNumber, () => {
+  console.log(`Web server started and running at http://localhost:${portNumber}`);
+  process.stdout.write('Stop to shutdown the server: ');
+});
+
+process.stdin.on('data', (data) => {
+  const inpt = data.toString().trim();
+  if (inpt === 'stop') {
+    server.close(() => {
+      console.log('Shutting down the server');
+      process.exit(0);
+    });
+  } else {
+    process.stdout.write('please only put \"stop\" to stop the server: ');
+  }
+});
 
 let catalogTableString =  "<table border='1'>";
 catalogTableString += "<tr><th>Book Title</th><th>Book Author</th></tr>";
@@ -54,7 +69,6 @@ app.get("/checkOut", (request, response) => {
 
   response.render("checkOut", {booksAvailable: "No books", items: "Not yet", portNumber: portNumber, checkedOut: "Books checked out will display here."});
 
-
 });
 
 app.post("/checkoutConfirmation", (request, response ) => {
@@ -62,29 +76,22 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
   console.log(itemsSelected);
 
-
-
     /* if itemsSelected is not an array, that is there is nothing selected or only one */ 
     if(Array.isArray(itemsSelected) === false){
     
-
       /* if nothing is selected by user, create empty array */ 
       if(itemsSelected == undefined){
-
-   
 
         itemsSelected = []; 
       }
       /* if one thing selected by user, create array with one element */ 
       else if(typeof itemsSelected == "string"){
      
-
         itemsSelected = [itemsSelected];
       }
     }
     
     console.log("Two: " + itemsSelected);
-
 
     /* create catalog table */ 
     let str = "";
@@ -94,8 +101,6 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
      if(itemsSelected.length >= 1){
      // inventory.itemsPurchased(itemsSelected);
-
-      
      
    //   itemsSelected.forEach(item => str += `<tr><td>${item}</td><td>${inventory.getItemCost(item).toFixed(2)}</td></tr>`);
      
@@ -110,8 +115,6 @@ app.post("/checkoutConfirmation", (request, response ) => {
     console.log(`str after selection is: ${str}`);
 
   response.render("checkedOutConfirmation", {portNumber: portNumber, checkedOut: str});
-
-
 
 
   deleteBook(variables);
@@ -154,9 +157,6 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
      }
   }
-
-
-
 });
 
 app.get("/", (request, response) =>{ 
@@ -274,6 +274,11 @@ async function findAllAvailable(){
   }else if(userSelection == "searchBook"){
 
     response.render("searchBook", {result: "", portNumber: portNumber});
+  }else if (userSelection =="searchBookAPI"){
+    getBooks();
+
+    response.render("searchBookAPI", {result: "", portNumber: portNumber});
+
   }
       });
 
@@ -329,10 +334,6 @@ app.post("/removeBook", (request, response) => {
 
        }
     }
-    
-
-
-
 });
 
 
@@ -388,9 +389,6 @@ async function insertBook(client, databaseAndCollection, newBook) {
  // console.log(`Movie entry created with id ${result.insertedId}`);
 }
 
-
-
-
 async function viewCatalog(){
   try {
     await client.connect();
@@ -410,9 +408,6 @@ async function viewCatalog(){
     catalogTableString = catalogString;
     // printCatalog(catalogString);
     
-
-
-   
 } catch (e) {
     console.error(e);
 } finally {
@@ -422,10 +417,6 @@ async function viewCatalog(){
 }
 
 }
-
-
-
-
 
 app.post("/searchBook", (request, response) => {
     let {bookTitle, bookAuthor} = request.body;
@@ -475,11 +466,43 @@ app.post("/searchBook", (request, response) => {
    }
 }
 
-}); 
+});
 
+//using API
 
+app.get("/searchBookAPI", (request, response)=>{
+  response.render("searchBookAPI", { portNumber: portNumber});
+});
 
+app.post("/searchBookAPI", (request, response) =>{
+  const {bookTitleAPI} = request.body;
 
-
-
+  getBooks(bookTitleAPI)
+  .then(data => {
+    response.render("searchBookAPI", {result: data, portNumber: portNumber});
+  })
+  .catch(error =>{ 
+    console.error('Error fetching the books using API', error);
+    response.render("searchBookAPI", {result: "Error fetching books.", portNumber: portNumber});
+  });
+});
+async function getBooks(bookTitleAPI){
+  try{
+    const response = await  fetch("http://openlibrary.org/search.json?q=" + bookTitleAPI);
+    const data = await response.json();
+    const books = [];
+    for(let i = 0; i < 5; i++){
+      const book = {
+        title: data.docs[i].title || 'Unknown Title',
+        author: data.docs[i].author_name[0] || 'Unknown Author',
+        coverImg: data.docs[i].isbn ? `http://covers.openlibrary.org/b/isbn/${data.docs[i].isbn[0]}-M.jpg` : 'No Cover',
+      };
+      books.push(book); 
+    }
+    return books;
+  }catch(error){
+    console.error('Error fetching the books using API', error);
+    throw error;
+  }
+}
 

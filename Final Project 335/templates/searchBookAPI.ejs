@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Books Using Open Library API</title>
+</head>
+<body>
+    <form action="/searchBookAPI" method="post" id="apiSearchForm">
+        <label for="apiInput">Enter Book Title: </label>
+        <input type="text" id="apiInput" name="bookTitleAPI" required>
+        <input type="submit" value="Search">
+    </form>
+    <div id="output">
+        <% if (result && result.length > 0) { %>
+            <ul>
+                <% result.forEach(book => { %>
+                    <li>
+                        <img src="<%= book.coverImg %>" alt="Cover Image">
+                        <p><%= book.title %> by <%= book.author %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No books found</p>
+        <% } %>
+    </div>
+    <script src="library.js"></script> 
+</body>
+</html>

@@ -106,7 +106,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
      
           itemsSelected.forEach(item => str += `<tr><td>${item}</td></tr>` );
 
-          itemsSelected.forEach(item => deleteBook({bookTitle:item})); 
+          itemsSelected.forEach(item => updateQuantity(item)); 
      //  str += `<tr><td>Cost: </td><td>${inventory.gettotalCost().toFixed(2)}</td></tr>`;
    }
 
@@ -116,7 +116,72 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
   response.render("checkedOutConfirmation", {portNumber: portNumber, checkedOut: str});
 
+  async function updateQuantity(title){
+    try {
+      await client.connect();
+      
+      console.log("***** Updating one movie *****");
+      let newValues = {quantity: lookUpOneEntry(client, databaseAndCollection, {bookTitle: title})};
+     
+      console.log(`NUM IS: ${Number(newValues)}`);
+      
+  } catch (e) {
+      console.error(e);
+  } finally {
+      await client.close();
+  }
+  }
 
+
+  async function lookUpOneEntry(client, databaseAndCollection, filters) {
+   
+    const result = await client.db(databaseAndCollection.db)
+                        .collection(databaseAndCollection.collection)
+                        .findOne(filters);
+
+                        console.log(result);
+
+
+                        let resultNumber = Number(result.quantity); 
+
+
+                        console.log(`Result Number is: ${resultNumber}`);
+
+   if (result) {
+       console.log(result);
+
+       let resultString = "";
+
+       resultString += `Found book: ${result.bookTitle} with author ${result.bookAuthor}`;
+
+       // response.render("searchBook", {result: resultString, portNumber: portNumber});
+
+       console.log(`Updating book: ${result.bookTitle} quantity ${result.quantity}`);
+
+       await updateOne(client, databaseAndCollection, result.bookTitle, result.quantity);
+
+      
+   } else {
+    response.render("searchBook", {result: "Book does not exist.", portNumber: portNumber});
+
+   }
+}
+
+
+  async function updateOne(client, databaseAndCollection, targetName, currentQuantity) {
+
+    console.log(`UPDATING QUANTTY Title:${targetName}`);
+    let filter = {bookTitle : targetName};
+    let update = { $set: {quantity: currentQuantity - 1} };
+
+    const result = await client.db(databaseAndCollection.db)
+    .collection(databaseAndCollection.collection)
+    .updateOne(filter, update);
+
+    console.log(`Documents modified: ${result.modifiedCount}`);
+}
+
+/* 
   deleteBook(variables);
 
   async function deleteBook(filters){
@@ -157,6 +222,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
      }
   }
+  */ 
 });
 
 app.get("/", (request, response) =>{ 
@@ -192,7 +258,7 @@ app.get("/", (request, response) =>{
     if(userSelection == "addBookToCatalog"){
       console.log("PPP Librarian functionality");
   
-      response.render("addBook", {portNumber: portNumber});
+      response.render("addBook", {result: "", portNumber: portNumber});
        
     }else if(userSelection == "removeFromCatalog"){
       console.log("REMOVING BOOKS FROM CATALOG");
@@ -248,9 +314,13 @@ async function findAllAvailable(){
     console.log(`Found: ${result.length} movies`);
     console.log(result);
 
-    let resultString = "<table border='1'><tr><th>Title</th><th>Author</th></tr>";
+    let resultString = "<table border='1'><tr><th>Title</th><th>Author</th><th>Quantity</th></tr>";
 
-    result.forEach(item => resultString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td></tr>`);
+    result.forEach(item => resultString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td><td>${item.quantity}</td></tr>`);
+
+    // result.forEach(item => Window.localStorage.setItem(`${item.bookTitle}`,`Number(${item.quantity})`));
+
+    // console.log(`Local storage: ${Window.localStorage.getItem("Harry")}`);
 
     resultString += "</table>";
 
@@ -338,28 +408,32 @@ app.post("/removeBook", (request, response) => {
 
 
 app.get("/addBook", (request, response) => {
-  response.render("addBook",  {portNumber: portNumber});
+  response.render("addBook",  {result: "", portNumber: portNumber});
 });
 
 app.post("/addBook", (request, response) => {
-  let {bookTitle, bookAuthor } = request.body; 
+  let {bookTitle, bookAuthor, quantity } = request.body; 
 
   console.log(`Book title is: ${bookTitle}`);
   console.log(`Book author is: ${bookAuthor}`);
-
+  console.log(`Book quantity is: ${quantity}`);
 
 
   const variables = {
     bookTitle: bookTitle,
     bookAuthor: bookAuthor,
-    // quantity: Number(quantity),
+   quantity: Number(quantity),
   }
 
   insertNewBook(variables);
 
   catalogTableString += `<tr><td>${bookTitle}</td><td>${bookAuthor}</td></tr>`;
 
-  response.render("bookAdded", {title: bookTitle, author: bookAuthor, portNumber: portNumber});
+  // response.render("bookAdded", {title: bookTitle, author: bookAuthor, portNumber: portNumber});
+
+  response.render("addBook", {result: `Success: Added ${quantity} copies of ${bookTitle} by ${bookAuthor}. `, 
+portNumber: portNumber});
+
 
 });
 
@@ -400,8 +474,8 @@ async function viewCatalog(){
     const result = await cursor.toArray();
     console.log(`Found: ${result.length} movies`);
     console.log(result);
-    let catalogString = "<table border ='1'><tr><th>Title</th><th>Author</th></tr>";
-    result.forEach(item => catalogString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td></tr>`);
+    let catalogString = "<table border ='1'><tr><th>Title</th><th>Author</th><th>Quantity</th></tr>";
+    result.forEach(item => catalogString += `<tr><td>${item.bookTitle}</td><td>${item.bookAuthor}</td><td>${item.quantity}</td></tr>`);
 
     console.log("Catalog string is: " + catalogString);
 

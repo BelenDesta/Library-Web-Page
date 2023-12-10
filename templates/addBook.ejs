@@ -10,10 +10,12 @@
     <form action="http://localhost:<%- portNumber %>/addBook" method="post">
     Book Title: <input type="text" id="bookTitle" name="bookTitle">
     Book Author: <input type="text" id="bookAuthor" name="bookAuthor">
- <!-- Quantity: <input type="number" min="1" id="quantity" name="quantity">  -->
+  Quantity: <input type="number" min="1" id="quantity" name="quantity"> 
 
     <input type="submit" id="submitButton" value="Add Book"> 
 
 </form>
+
+<%- result %>
 </body>
 </html>

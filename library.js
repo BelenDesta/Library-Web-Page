@@ -232,7 +232,7 @@ app.get("/", (request, response) =>{
   }else if(userSelection == "user"){
     console.log("User functionality");
 
-    response.render("userActions");
+    response.render("userActions", {portNumber: portNumber});
   }
   });
 
@@ -352,7 +352,7 @@ response.render("removeBook", {status: "", portNumber: portNumber});
 app.post("/removeAllBooks", (request, response) => {
 
   deleteAll();
-  
+
   async function deleteAll(){
   try {
     await client.connect();
@@ -547,6 +547,9 @@ app.post("/searchBook", (request, response) => {
        let resultString = "";
 
        resultString += `Found book: ${result.bookTitle} with author ${result.bookAuthor}`;
+       resultString += "\n";
+       resultString += `Copies Available: ${result.quantity}`;
+
 
        response.render("searchBook", {result: resultString, portNumber: portNumber});
 

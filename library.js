@@ -106,7 +106,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
      
           itemsSelected.forEach(item => str += `<tr><td>${item}</td></tr>` );
 
-          itemsSelected.forEach(item => updateQuantity(item)); 
+          itemsSelected.forEach(item => deleteBook({bookTitle: item})); 
      //  str += `<tr><td>Cost: </td><td>${inventory.gettotalCost().toFixed(2)}</td></tr>`;
    }
 
@@ -116,19 +116,27 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
   response.render("checkedOutConfirmation", {portNumber: portNumber, checkedOut: str});
 
-  async function updateQuantity(title){
+  // deleteBook(variables);
+
+  async function deleteBook(filters){
+
+    let result; 
+  
     try {
       await client.connect();
-      
-      console.log("***** Updating one movie *****");
-      let newValues = {quantity: lookUpOneEntry(client, databaseAndCollection, {bookTitle: title})};
+      console.log("***** Deleting one movie *****");
      
-      console.log(`NUM IS: ${Number(newValues)}`);
-      
+      result = await lookUpOneEntry(client, databaseAndCollection, filters);
+  
+      return result; 
+  
+  
   } catch (e) {
       console.error(e);
   } finally {
       await client.close();
+  
+      return result;
   }
   }
 
@@ -158,8 +166,9 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
        console.log(`Updating book: ${result.bookTitle} quantity ${result.quantity}`);
 
-       await updateOne(client, databaseAndCollection, result.bookTitle, result.quantity);
+      
 
+       await updateOne(client, databaseAndCollection, result.bookTitle, result.quantity);
       
    } else {
     response.render("searchBook", {result: "Book does not exist.", portNumber: portNumber});
@@ -168,43 +177,20 @@ app.post("/checkoutConfirmation", (request, response ) => {
 }
 
 
-  async function updateOne(client, databaseAndCollection, targetName, currentQuantity) {
+async function updateOne(client, databaseAndCollection, targetName, currentQuantity) {
 
-    console.log(`UPDATING QUANTTY Title:${targetName}`);
-    let filter = {bookTitle : targetName};
-    let update = { $set: {quantity: currentQuantity - 1} };
+  console.log(`UPDATING QUANTTY Title:${targetName}`);
+  let filter = {bookTitle : targetName};
+  let update = { $set: {quantity: currentQuantity - 1} };
 
-    const result = await client.db(databaseAndCollection.db)
-    .collection(databaseAndCollection.collection)
-    .updateOne(filter, update);
+  const result = await client.db(databaseAndCollection.db)
+  .collection(databaseAndCollection.collection)
+  .updateOne(filter, update);
 
-    console.log(`Documents modified: ${result.modifiedCount}`);
+  console.log(`Documents modified: ${result.modifiedCount}`);
 }
 
-/* 
-  deleteBook(variables);
 
-  async function deleteBook(filters){
-
-    let result; 
-  
-    try {
-      await client.connect();
-      console.log("***** Deleting one movie *****");
-     
-      result = await deleteOne(client, databaseAndCollection, filters);
-  
-      return result; 
-  
-  
-  } catch (e) {
-      console.error(e);
-  } finally {
-      await client.close();
-  
-      return result;
-  }
-  }
   
   async function deleteOne(client, databaseAndCollection, filters) {
    
@@ -222,7 +208,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
      }
   }
-  */ 
+   
 });
 
 app.get("/", (request, response) =>{ 

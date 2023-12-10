@@ -106,7 +106,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
      
           itemsSelected.forEach(item => str += `<tr><td>${item}</td></tr>` );
 
-          itemsSelected.forEach(item => deleteBook({bookTitle: item})); 
+          itemsSelected.forEach(item => changeQuantity({bookTitle: item})); 
      //  str += `<tr><td>Cost: </td><td>${inventory.gettotalCost().toFixed(2)}</td></tr>`;
    }
 
@@ -118,7 +118,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
   // deleteBook(variables);
 
-  async function deleteBook(filters){
+  async function changeQuantity(filters){
 
     let result; 
   
@@ -134,7 +134,7 @@ app.post("/checkoutConfirmation", (request, response ) => {
   } catch (e) {
       console.error(e);
   } finally {
-      await client.close();
+    //  await client.close();
   
       return result;
   }

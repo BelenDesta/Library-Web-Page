@@ -349,6 +349,30 @@ app.get("/removeBook", (request, response) => {
 response.render("removeBook", {status: "", portNumber: portNumber});
 });
 
+app.post("/removeAllBooks", (request, response) => {
+
+  deleteAll();
+  
+  async function deleteAll(){
+  try {
+    await client.connect();
+    console.log("***** Clearing Collection *****");
+    const result = await client.db(databaseAndCollection.db)
+    .collection(databaseAndCollection.collection)
+    .deleteMany({});
+    console.log(`Deleted documents `);
+    response.render("removeBook", {status: `Deleted all ${result.deletedCount} books in library. No books left.`, portNumber: portNumber});
+
+} catch (e) {
+    console.error(e);
+} finally {
+    await client.close();
+}
+}
+  
+
+});
+
 app.post("/removeBook", (request, response) => {
     let {bookTitle, bookAuthor} = request.body; 
 

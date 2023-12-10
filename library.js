@@ -64,6 +64,23 @@ let catalogTableString =  "Retrieving data from MongoDB. Please refresh.";
 let booksCheckedOut = "Not yet."; 
 
 
+app.get("/viewCatalog", (request, response) => {
+        viewCatalog();
+
+        response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
+}); 
+
+app.get("/librarianActions", (request, response) => {
+  viewCatalog();
+
+  response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
+}); 
+
+app.get("/userActions", (request, response) => {
+  viewCatalog();
+
+  response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
+}); 
 app.get("/checkOut", (request, response) => {
 
   response.render("checkOut", {booksAvailable: "No books", items: "Not yet", portNumber: portNumber, checkedOut: "Books checked out will display here."});

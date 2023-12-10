@@ -6,6 +6,7 @@
     <title>Search for a Book</title>
 </head>
 <body>
+
     <form action="http://localhost:<%- portNumber %>/searchBook" method="post">
         Search for Title: <input type="text" name="bookTitle" id="title">
         Search for Author: <input type="text" name="bookAuthor" id="author">
@@ -14,5 +15,9 @@
     </form>
     
     <%- result %> 
+
+    <a href="http://localhost:<%- portNumber %>/">Return Home</a>
+
+    
 </body>
 </html>

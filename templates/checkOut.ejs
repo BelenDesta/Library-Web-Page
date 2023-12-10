@@ -12,8 +12,6 @@
     <h2>Current Books Available: </h2>
     <%- booksAvailable %>
     
-
-
         <form action="http://localhost:<%- portNumber %>/checkOutConfirmation" method="post">
            
             <select name="itemsSelected" multiple>
@@ -22,6 +20,8 @@
 
             <input type="submit"> 
         </form>
+
+        <a href="http://localhost:<%- portNumber %>/">Return Home</a>
 
     
    

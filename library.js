@@ -115,6 +115,8 @@ app.post("/checkoutConfirmation", (request, response ) => {
 
   response.render("checkedOutConfirmation", {portNumber: portNumber, checkedOut: str});
 
+
+
   // deleteBook(variables);
 
   async function changeQuantity(filters){

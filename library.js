@@ -314,7 +314,14 @@ async function findAllAvailable(){
 
     let itemString; 
 
-    result.forEach(item => itemString += `<option value='${item.bookTitle}'>${item.bookTitle}</option>`);
+    result.filter(item => item.quantity > 0).forEach(item => 
+      
+     
+        itemString += `<option value='${item.bookTitle}'>${item.bookTitle}</option>`
+
+      
+      
+      ); 
 
     booksCheckedOut = "2439u3";
 

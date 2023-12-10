@@ -59,7 +59,7 @@ process.stdin.on('data', (data) => {
   }
 });
 
-let catalogTableString =  "Retrieving data from MongoDB. Please refresh."; 
+let catalogTableString =  "Retrieving data from MongoDB. Page refreshes automatically."; 
 
 let booksCheckedOut = "Not yet."; 
 
@@ -564,8 +564,8 @@ app.post("/searchBook", (request, response) => {
 
        let resultString = "";
 
-       resultString += `Found book: ${result.bookTitle} with author ${result.bookAuthor}`;
-       resultString += "\n";
+       resultString += `Found book: ${result.bookTitle} by author: ${result.bookAuthor}`;
+       resultString += `<br>`;
        resultString += `Copies Available: ${result.quantity}`;
 
 

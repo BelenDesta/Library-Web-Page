@@ -59,8 +59,7 @@ process.stdin.on('data', (data) => {
   }
 });
 
-let catalogTableString =  "<table border='1'>";
-catalogTableString += "<tr><th>Book Title</th><th>Book Author</th></tr>";
+let catalogTableString =  "Retrieving data from MongoDB. Please refresh."; 
 
 let booksCheckedOut = "Not yet."; 
 
@@ -310,7 +309,7 @@ async function findAllAvailable(){
 
     resultString += "</table>";
 
-    console.log(`Result strig is: ${resultString}`);
+    console.log(`Result string is: ${resultString}`);
 
     let itemString; 
 

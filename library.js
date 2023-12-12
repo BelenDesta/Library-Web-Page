@@ -527,7 +527,7 @@ async function viewCatalog(){
 
 }
 
-app.post("https://test2-t7c9.onrender.com/searchBook", (request, response) => {
+app.post("/searchBook", (request, response) => {
     let {bookTitle, bookAuthor} = request.body;
 
     const variables = {

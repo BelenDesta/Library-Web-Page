@@ -30,7 +30,7 @@ const app = express(); /* app is a request handler function */
 const bodyParser = require("body-parser"); /* To handle post parameters */
 const { error } = require("console");
 
-const portNumber = portEntered;
+const portNumber =  process.env.PORT || 3030;
 
 /* Initializes request.body with post information */ 
 app.use(bodyParser.urlencoded({extended:false}));

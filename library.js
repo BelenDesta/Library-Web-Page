@@ -354,7 +354,7 @@ async function findAllAvailable(){
 
   }else if(userSelection == "searchBook"){
 
-    response.render("searchBook", {result: "", portNumber: portNumber});
+    response.render("https://test2-t7c9.onrender.com/searchBook", {result: "", portNumber: portNumber});
   }else if (userSelection =="searchBookAPI"){
     getBooks();
 
@@ -527,7 +527,7 @@ async function viewCatalog(){
 
 }
 
-app.post("/searchBook", (request, response) => {
+app.post("https://test2-t7c9.onrender.com/searchBook", (request, response) => {
     let {bookTitle, bookAuthor} = request.body;
 
     const variables = {

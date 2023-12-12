@@ -1,4 +1,4 @@
-Team Members: Arthur Liao (117774832), Belen Desta(), Justin Zhang()
+Team Members: Arthur Liao (117774832), Belen Desta(119382851), Justin Zhang()
 
 App Description: This is a library catalog allowing books to be added, removed, searched and 
 checked-out (with quantity updated) using MongoDB. The Open Library API allows users to 

@@ -64,11 +64,14 @@ let catalogTableString =  "Retrieving data from MongoDB. Page refreshes automati
 let booksCheckedOut = "Not yet."; 
 
 
+/* 
 app.get("/viewCatalog", (request, response) => {
         viewCatalog();
 
         response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
 }); 
+
+*/
 
 app.get("/librarianActions", (request, response) => {
   viewCatalog();

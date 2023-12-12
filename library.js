@@ -80,7 +80,7 @@ app.get("/userActions", (request, response) => {
   // viewCatalog();
 
   response.render("userActions",{portNumber: portNumber} );
-  
+
  // response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
 }); 
 app.get("/checkOut", (request, response) => {
@@ -356,7 +356,7 @@ async function findAllAvailable(){
 
   }else if(userSelection == "searchBook"){
 
-    response.render("https://test2-t7c9.onrender.com/searchBook", {result: "", portNumber: portNumber});
+    response.render("/searchBook", {result: "", portNumber: portNumber});
   }else if (userSelection =="searchBookAPI"){
     getBooks();
 
@@ -529,7 +529,7 @@ async function viewCatalog(){
 
 }
 
-app.post("https://test2-t7c9.onrender.com/searchBook", (request, response) => {
+app.post("/searchBook", (request, response) => {
     let {bookTitle, bookAuthor} = request.body;
 
     const variables = {

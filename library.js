@@ -262,7 +262,7 @@ app.get("/", (request, response) =>{
     if(userSelection == "addBookToCatalog"){
       console.log("PPP Librarian functionality");
   
-      response.render("addBook", {result: "", portNumber: portNumber});
+      response.render("https://test2-t7c9.onrender.com/addBook", {result: "", portNumber: portNumber});
        
     }else if(userSelection == "removeFromCatalog"){
       console.log("REMOVING BOOKS FROM CATALOG");
@@ -442,11 +442,11 @@ app.post("/removeBook", (request, response) => {
 });
 
 
-app.get("/addBook", (request, response) => {
-  response.render("addBook",  {result: "", portNumber: portNumber});
+app.get("https://test2-t7c9.onrender.com/addBook", (request, response) => {
+  response.render("https://test2-t7c9.onrender.com/addBook",  {result: "", portNumber: portNumber});
 });
 
-app.post("/addBook", (request, response) => {
+app.post("https://test2-t7c9.onrender.com/addBook", (request, response) => {
   let {bookTitle, bookAuthor, quantity } = request.body; 
 
   console.log(`Book title is: ${bookTitle}`);
@@ -466,7 +466,7 @@ app.post("/addBook", (request, response) => {
 
   // response.render("bookAdded", {title: bookTitle, author: bookAuthor, portNumber: portNumber});
 
-  response.render("addBook", {result: `Success: Added ${quantity} copies of ${bookTitle} by ${bookAuthor}. `, 
+  response.render("https://test2-t7c9.onrender.com/addBook", {result: `Success: Added ${quantity} copies of ${bookTitle} by ${bookAuthor}. `, 
 portNumber: portNumber});
 
 

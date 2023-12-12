@@ -626,6 +626,7 @@ async function getBooks(bookTitleAPI){
   }catch(error){
     console.error('Error fetching the books using API', error);
     throw error;
+
   }
 }
 

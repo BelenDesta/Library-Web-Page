@@ -77,9 +77,11 @@ app.get("/librarianActions", (request, response) => {
 }); 
 
 app.get("/userActions", (request, response) => {
-  viewCatalog();
+  // viewCatalog();
 
-  response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
+  response.render("userActions",{portNumber: portNumber} );
+  
+ // response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
 }); 
 app.get("/checkOut", (request, response) => {
 

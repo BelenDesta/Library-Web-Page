@@ -357,6 +357,7 @@ async function findAllAvailable(){
   }else if(userSelection == "searchBook"){
 
     response.render("/searchBook", {result: "", portNumber: portNumber});
+    
   }else if (userSelection =="searchBookAPI"){
     getBooks();
 

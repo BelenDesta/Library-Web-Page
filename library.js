@@ -267,7 +267,7 @@ app.get("/", (request, response) =>{
     if(userSelection == "addBookToCatalog"){
       console.log("PPP Librarian functionality");
   
-      response.render("https://test2-t7c9.onrender.com/addBook", {result: "", portNumber: portNumber});
+      response.render("https://test3-lk3e.onrender.com/addBook", {result: "", portNumber: portNumber});
        
     }else if(userSelection == "removeFromCatalog"){
       console.log("REMOVING BOOKS FROM CATALOG");
@@ -359,7 +359,7 @@ async function findAllAvailable(){
 
   }else if(userSelection == "searchBook"){
 
-    response.render("https://test2-t7c9.onrender.com/searchBook", {result: "", portNumber: portNumber});
+    response.render("https://test3-lk3e.onrender.com/searchBook", {result: "", portNumber: portNumber});
 
   }else if (userSelection =="searchBookAPI"){
     getBooks();
@@ -448,11 +448,11 @@ app.post("/removeBook", (request, response) => {
 });
 
 
-app.get("https://test2-t7c9.onrender.com/addBook", (request, response) => {
-  response.render("https://test2-t7c9.onrender.com/addBook",  {result: "", portNumber: portNumber});
+app.get("https://test3-lk3e.onrender.com/addBook", (request, response) => {
+  response.render("https://test3-lk3e.onrender.com/addBook",  {result: "", portNumber: portNumber});
 });
 
-app.post("https://test2-t7c9.onrender.com/addBook", (request, response) => {
+app.post("https://test3-lk3e.onrender.com/addBook", (request, response) => {
   let {bookTitle, bookAuthor, quantity } = request.body; 
 
   console.log(`Book title is: ${bookTitle}`);
@@ -472,7 +472,7 @@ app.post("https://test2-t7c9.onrender.com/addBook", (request, response) => {
 
   // response.render("bookAdded", {title: bookTitle, author: bookAuthor, portNumber: portNumber});
 
-  response.render("https://test2-t7c9.onrender.com/addBook", {result: `Success: Added ${quantity} copies of ${bookTitle} by ${bookAuthor}. `, 
+  response.render("https://test3-lk3e.onrender.com/addBook", {result: `Success: Added ${quantity} copies of ${bookTitle} by ${bookAuthor}. `, 
 portNumber: portNumber});
 
 
@@ -533,7 +533,7 @@ async function viewCatalog(){
 
 }
 
-app.post("/searchBook", (request, response) => {
+app.post("https://test3-lk3e.onrender.com/searchBook", (request, response) => {
     let {bookTitle, bookAuthor} = request.body;
 
     const variables = {
@@ -592,8 +592,8 @@ app.get("/searchBookAPI", (request, response)=>{
   response.render("searchBookAPI", { portNumber: portNumber});
 });
 
-app.get("/searchBook", (request, response)=>{
-  response.render("searchBook", { portNumber: portNumber});
+app.get("https://test3-lk3e.onrender.com/searchBook", (request, response)=>{
+  response.render("https://test3-lk3e.onrender.com/searchBook", { portNumber: portNumber});
 });
 
 

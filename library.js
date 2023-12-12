@@ -356,8 +356,8 @@ async function findAllAvailable(){
 
   }else if(userSelection == "searchBook"){
 
-    response.render("/searchBook", {result: "", portNumber: portNumber});
-    
+    response.render("https://test2-t7c9.onrender.com/searchBook", {result: "", portNumber: portNumber});
+
   }else if (userSelection =="searchBookAPI"){
     getBooks();
 
@@ -588,6 +588,11 @@ app.post("/searchBook", (request, response) => {
 app.get("/searchBookAPI", (request, response)=>{
   response.render("searchBookAPI", { portNumber: portNumber});
 });
+
+app.get("/searchBook", (request, response)=>{
+  response.render("searchBook", { portNumber: portNumber});
+});
+
 
 app.post("/searchBookAPI", (request, response) =>{
   const {bookTitleAPI} = request.body;

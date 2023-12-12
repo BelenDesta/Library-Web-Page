@@ -267,7 +267,7 @@ app.get("/", (request, response) =>{
     if(userSelection == "addBookToCatalog"){
       console.log("PPP Librarian functionality");
   
-      response.render("/addBook", {result: "", portNumber: portNumber});
+      response.render("addBook", {result: "", portNumber: portNumber});
        
     }else if(userSelection == "removeFromCatalog"){
       console.log("REMOVING BOOKS FROM CATALOG");
@@ -359,7 +359,7 @@ async function findAllAvailable(){
 
   }else if(userSelection == "searchBook"){
 
-    response.render("https://test3-lk3e.onrender.com/searchBook", {result: "", portNumber: portNumber});
+    response.render("searchBook", {result: "", portNumber: portNumber});
 
   }else if (userSelection =="searchBookAPI"){
     getBooks();
@@ -533,7 +533,7 @@ async function viewCatalog(){
 
 }
 
-app.post("https://test3-lk3e.onrender.com/searchBook", (request, response) => {
+app.post("/searchBook", (request, response) => {
     let {bookTitle, bookAuthor} = request.body;
 
     const variables = {
@@ -592,8 +592,8 @@ app.get("/searchBookAPI", (request, response)=>{
   response.render("searchBookAPI", { portNumber: portNumber});
 });
 
-app.get("https://test3-lk3e.onrender.com/searchBook", (request, response)=>{
-  response.render("https://test3-lk3e.onrender.com/searchBook", { portNumber: portNumber});
+app.get("/searchBook", (request, response)=>{
+  response.render("searchBook", { portNumber: portNumber});
 });
 
 

@@ -5,6 +5,9 @@ checked-out (with quantity updated) using MongoDB. The Open Library API allows u
 search for books available outside the library catalog system.
 
 API Links: 
+Open Library API Link 
+https://openlibrary.org/dev/docs/api/search
+This API allows us to retrieve book titles from Open Library.
 
 YouTube Demo Video: 
 

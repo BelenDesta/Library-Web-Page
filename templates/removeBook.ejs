@@ -13,7 +13,7 @@
 
     
     <h2>Remove Single Book</h2>
-    <form action="http://localhost:<%- portNumber %>/removeBook" method="post">
+    <form action="/removeBook" method="post">
         Book Title: <input type="text" id="bookTitle" name="bookTitle">
         Book Author: <input type="text" id="bookAuthor" name="bookAuthor">
 
@@ -22,7 +22,7 @@
     </form>
 
     <h2>Remove All Books</h2>
-    <form action="http://localhost:<%- portNumber %>/removeAllBooks" method="post">
+    <form action="/removeAllBooks" method="post">
         <input type="submit" id="submitButton" value="Remove All Books In Library"> 
     </form>
 

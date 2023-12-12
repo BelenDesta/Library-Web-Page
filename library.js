@@ -449,7 +449,7 @@ app.post("/removeBook", (request, response) => {
 
 
 app.get("/addBook", (request, response) => {
-  response.render("/addBook",  {result: "", portNumber: portNumber});
+  response.render("addBook",  {result: "", portNumber: portNumber});
 });
 
 app.post("/addBook", (request, response) => {
@@ -472,7 +472,7 @@ app.post("/addBook", (request, response) => {
 
   // response.render("bookAdded", {title: bookTitle, author: bookAuthor, portNumber: portNumber});
 
-  response.render("/addBook", {result: `Success: Added ${quantity} copies of ${bookTitle} by ${bookAuthor}. `, 
+  response.render("addBook", {result: `Success: Added ${quantity} copies of ${bookTitle} by ${bookAuthor}. `, 
 portNumber: portNumber});
 
 

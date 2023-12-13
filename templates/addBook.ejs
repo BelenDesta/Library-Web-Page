@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Add Book</h1>
-    <form action="http://localhost:<%- portNumber %>/addBook" method="post">
+    <form action="/addBook" method="post">
     Book Title: <input type="text" id="bookTitle" name="bookTitle">
     Book Author: <input type="text" id="bookAuthor" name="bookAuthor">
   Quantity: <input type="number" min="1" id="quantity" name="quantity"> 
@@ -18,7 +18,7 @@
 
 <%- result %>
 
-<a href="http://localhost:<%- portNumber %>/">Return Home</a>
+<a href="/">Return Home</a>
 
 </body>
 

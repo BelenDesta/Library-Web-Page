@@ -30,7 +30,7 @@ const app = express(); /* app is a request handler function */
 const bodyParser = require("body-parser"); /* To handle post parameters */
 const { error } = require("console");
 
-const portNumber = portEntered;
+const portNumber =  process.env.PORT || 3030;
 
 /* Initializes request.body with post information */ 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -64,11 +64,14 @@ let catalogTableString =  "Retrieving data from MongoDB. Page refreshes automati
 let booksCheckedOut = "Not yet."; 
 
 
+/* 
 app.get("/viewCatalog", (request, response) => {
         viewCatalog();
 
         response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
 }); 
+
+*/
 
 app.get("/librarianActions", (request, response) => {
   viewCatalog();
@@ -77,7 +80,9 @@ app.get("/librarianActions", (request, response) => {
 }); 
 
 app.get("/userActions", (request, response) => {
-  viewCatalog();
+   viewCatalog();
+
+ // response.render("userActions",{portNumber: portNumber} );
 
   response.render("viewCatalog", {catalogTable: catalogTableString, portNumber: portNumber});
 }); 
@@ -355,6 +360,7 @@ async function findAllAvailable(){
   }else if(userSelection == "searchBook"){
 
     response.render("searchBook", {result: "", portNumber: portNumber});
+
   }else if (userSelection =="searchBookAPI"){
     getBooks();
 
@@ -586,6 +592,11 @@ app.get("/searchBookAPI", (request, response)=>{
   response.render("searchBookAPI", { portNumber: portNumber});
 });
 
+app.get("/searchBook", (request, response)=>{
+  response.render("searchBook", { portNumber: portNumber});
+});
+
+
 app.post("/searchBookAPI", (request, response) =>{
   const {bookTitleAPI} = request.body;
 
@@ -615,6 +626,7 @@ async function getBooks(bookTitleAPI){
   }catch(error){
     console.error('Error fetching the books using API', error);
     throw error;
+
   }
 }
 
